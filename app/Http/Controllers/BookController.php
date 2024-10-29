@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Book;
+use App\Models\Isbn;
 
 
 class BookController extends Controller
@@ -15,7 +16,7 @@ class BookController extends Controller
     public function index(Book $book)
     {
         $booksList = $book->all();
-        return view('books/list',['booksList' => $booksList]);
+        return view('books/list', ['booksList' => $booksList]);
     }
 
     /**
@@ -23,13 +24,23 @@ class BookController extends Controller
      */
     public function create()
     {
+        // $book = new Book();
+        // $book->name = "Pan Tadeusz";
+        // $book->year = 1999;
+        // $book->publication_place = "Kraków";
+        // $book->pages = 450;
+        // $book->price = 39.99;
+        // $book->save();
+        // $isbn = new Isbn(['number' => '123456789', 'issued_by' => "Wydawca", 'issued_on' => "2015-01-20"]);
+        // $book->isbn()->save($isbn);
+        // return redirect('books');
         $book = new Book();
-            $book->name = "Pan Tadeusz";
-            $book->year = 1999;
-            $book->publication_place = "Kraków";
-            $book->pages = 450;
-            $book->price = 39.99;
-            $book->save();
+        $book->name = "Czarny Dom";
+        $book->year = 2010;
+        $book->publication_place = "Warszawa";
+        $book->pages = 648;
+        $book->price = 59.99;
+        $book->save();
         return redirect('books');
     }
 
@@ -47,7 +58,7 @@ class BookController extends Controller
     public function show(string $id)
     {
         $book = Book::find($id);
-        return view('books/show',['book' => $book]);
+        return view('books/show', ['book' => $book]);
     }
 
     /**

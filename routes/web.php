@@ -13,11 +13,16 @@ use Illuminate\Support\Facades\Route;
 |
 */
 use App\Http\Controllers\BookController;
+use App\Http\Controllers\LoanController;
+use App\Http\Controllers\AuthorController;
+
 
 
 Route::get('/', function () {
     return view('welcome');
-    });
+});
 
 Route::resource('books', BookController::class);
 Route::get('/books/{id}/delete', 'BookController@destroy');
+Route::resource('loans', LoanController::class);
+Route::resource('authors', AuthorController::class);

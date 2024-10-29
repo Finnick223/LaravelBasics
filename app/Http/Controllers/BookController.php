@@ -1,17 +1,21 @@
 <?php
 
 namespace App\Http\Controllers;
-
 use Illuminate\Http\Request;
+use App\Models\Book;
+
 
 class BookController extends Controller
 {
     /**
      * Display a listing of the resource.
+     *
+     *
      */
-    public function index()
+    public function index(Book $book)
     {
-        return view('books/list',['booksList' => array()]);
+        $booksList = $book->all();
+        return view('books/list',['booksList' => $booksList]);
     }
 
     /**

@@ -17,14 +17,21 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="nav navbar-nav navbar-right">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ URL::to('books') }}">Książki </a>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" data-toggle="dropdown" href="{{ URL::to('books') }}">Książki</a>
+                    <div class="dropdown-menu">
+                        <a class="dropdown-item" href="{{ URL::to('books/cheapest') }}">Top 3
+                            najtańszych</a>
+                        <a class="dropdown-item" href="{{ URL::to('books/longest') }}">Top 3
+                            najdłuższych</a>
+                        <a class="dropdown-item" href="{{ URL::to('books') }}">Wszystkie</a>
+                    </div>
                 </li>
                 <li>
                     <a class="nav-link" href="{{ URL::to('loans') }}">Wypożyczenia </a>
                 </li>
                 <li>
-                    <a class="nav-link" href="{{ URL::to('authors') }}">Autorzy</a>
+                    <a class="nav-link" href="{{ URL::to('authors') }}">Autorzy </a>
                 </li>
             </ul>
         </div>

@@ -22,7 +22,11 @@ Route::get('/', function () {
     return view('welcome');
 });
 
+Route::get('/books/cheapest', [BookController::class, 'cheapest']);
+Route::get('/books/longest', [BookController::class, 'longest']);
+Route::get('/books/search', [BookController::class, 'search']);
 Route::resource('books', BookController::class);
 Route::get('/books/{id}/delete', 'BookController@destroy');
 Route::resource('loans', LoanController::class);
 Route::resource('authors', AuthorController::class);
+

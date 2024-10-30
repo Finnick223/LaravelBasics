@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Http\Requests\StoreBook;
+use App\Events\BookCreated;
 use App\Models\Book;
 use App\Models\Isbn;
 use App\Models\Author;
 use App\Repositories\BookRepository;
+use App\Services\OpenLibrary;
 use DB;
 
 
@@ -46,17 +48,22 @@ class BookController extends Controller
             'price' => 'required|numeric',
         ]);
         $data = $request->all();
-        $bookRepo->create($data);
+        $book = $bookRepo->create($data);
+        event(new BookCreated($book));
         return redirect('books');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(BookRepository $bookRepo, $id)
+    public function show(OpenLibrary $ol, BookRepository $bookRepo, $id)
     {
         $book = $bookRepo->find($id);
-        return view('books/show', ['book' => $book]);
+        $openLibraryData = $ol->search($book->name);
+        return view('books/show', [
+            'book' => $book,
+            'ol' => json_decode($openLibraryData)
+        ]);
     }
 
     /**

@@ -18,6 +18,12 @@ class BookRepository extends BaseRepository
         }
         return $book;
     }
+    public function update(array $data, $id)
+    {
+        $book = Book::findOrFail($id);
+        $book->update($data);
+        return $book;
+    }
     public function cheapest()
     {
         $booksList = $this->model->orderBy('price', 'asc')->limit(3)->get();

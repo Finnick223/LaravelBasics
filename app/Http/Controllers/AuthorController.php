@@ -22,24 +22,9 @@ class AuthorController extends Controller
      */
     public function create()
     {
-        $author = new Author();
-        $author->lastname = "Straub";
-        $author->firstname = "Peter";
-        $author->birthday = "1943-03-02";
-        $author->genres = "horrory, thrillery";
-        $author->save();
+        $authors = Author::all();
 
-        $authorSecond = new Author();
-        $authorSecond->lastname = "King";
-        $authorSecond->firstname = "Stephen";
-        $authorSecond->birthday = "1947-09-21";
-        $authorSecond->genres = "horrory, thrillery";
-        $authorSecond->save();
-
-        $czarnyDom = Book::where('name', "Czarny Dom")->first();
-        $czarnyDom->authors()->attach($author);
-        $czarnyDom->authors()->attach($authorSecond);
-        return redirect('books');
+        return view('authors/create', ['authors' => $authors]);
     }
 
     /**
@@ -47,7 +32,12 @@ class AuthorController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $data = $request->all();
+        $author = new Author();
+        $author->fill($data);
+        $author->save();
+
+        return redirect('authors');
     }
 
     /**

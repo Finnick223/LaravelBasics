@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Book;
 use App\Models\Isbn;
+use App\Models\Author;
+use App\Repositories\BookRepository;
 use DB;
 
 
@@ -23,42 +25,28 @@ class BookController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(BookRepository $bookRepo)
     {
-        // $book = new Book();
-        // $book->name = "Pan Tadeusz";
-        // $book->year = 1999;
-        // $book->publication_place = "Kraków";
-        // $book->pages = 450;
-        // $book->price = 39.99;
-        // $book->save();
-        // $isbn = new Isbn(['number' => '123456789', 'issued_by' => "Wydawca", 'issued_on' => "2015-01-20"]);
-        // $book->isbn()->save($isbn);
-        // return redirect('books');
-        $book = new Book();
-        $book->name = "Czarny Dom";
-        $book->year = 2010;
-        $book->publication_place = "Warszawa";
-        $book->pages = 648;
-        $book->price = 59.99;
-        $book->save();
-        return redirect('books');
+        $authors = Author::all();
+        return view('books/create', ['authors' => $authors]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request, BookRepository $bookRepo)
     {
-        //
+        $data = $request->all();
+        $bookRepo->create($data);
+        return redirect('books');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(BookRepository $bookRepo, $id)
     {
-        $book = Book::find($id);
+        $book = $bookRepo->find($id);
         return view('books/show', ['book' => $book]);
     }
 
@@ -90,27 +78,25 @@ class BookController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(BookRepository $bookRepo, $id)
     {
-        $book = Book::find($id);
-        $book->delete();
+        $bookRepo->delete($id);
         return redirect('books');
     }
-    public function cheapest(Book $book)
+    public function cheapest(BookRepository $bookRepo)
     {
-        $booksList = DB::table('books')->orderBy('price', 'asc')->limit(3)->get();
+        $booksList = $bookRepo->cheapest();
         return view('books/list', ['booksList' => $booksList]);
     }
-    public function longest(Book $book)
+    public function longest(BookRepository $bookRepo)
     {
-        $booksList = DB::table('books')->orderBy('pages', 'desc')->limit(3)->get();
+        $booksList = $bookRepo->longest();
         return view('books/list', ['booksList' => $booksList]);
     }
-
-    public function search(Request $request, Book $book)
+    public function search(Request $request, BookRepository $bookRepo)
     {
         $q = $request->input('q', "");
-        $booksList = DB::table('books')->where('name', 'like', "%" . $q . "%")->get();
+        $booksList = $bookRepo->search($q);
         return view('books/list', ['booksList' => $booksList]);
     }
 }

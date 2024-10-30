@@ -23,10 +23,20 @@ Route::get('/', function () {
 });
 
 Route::get('/books/cheapest', [BookController::class, 'cheapest']);
+
 Route::get('/books/longest', [BookController::class, 'longest']);
+
 Route::get('/books/search', [BookController::class, 'search']);
+
 Route::resource('books', BookController::class);
+
 Route::get('/books/{id}/delete', 'BookController@destroy');
+
 Route::resource('loans', LoanController::class);
+
 Route::resource('authors', AuthorController::class);
 
+Route::get('language/{locale}', function ($locale) {
+    session(['locale' => $locale]);
+    return redirect()->route('books.index');
+});
